@@ -1,5 +1,6 @@
 package vistas;
 
+import javax.swing.JOptionPane;
 import modelo.Cuenta;
 
 /**
@@ -12,12 +13,14 @@ public class DetalleCuenta extends javax.swing.JDialog {
     /**
      * Creates new form DetalleCuenta
      */
-    public DetalleCuenta(java.awt.Frame parent, boolean modal, double valorInicial) {
+    public DetalleCuenta(java.awt.Frame parent, boolean modal, 
+            double valorInicial, String titular) {
         super(parent, modal);
         initComponents();
-        cuenta = new Cuenta(valorInicial);
+        cuenta = new Cuenta(valorInicial, titular);
         actualizarSaldo();
         lblError.setVisible(false);
+        lbTitular.setText(titular);
     }
     
     /**
@@ -27,6 +30,8 @@ public class DetalleCuenta extends javax.swing.JDialog {
         double saldo = cuenta.getCuenta(); 
         String valor = String.format("$ %.2f", saldo); 
         jlSaldo.setText(valor);
+        jlStatius.setText(cuenta.getStatus()?"ACTIVO":"INACTIVO");
+        lblError.setVisible(false);          
     }
 
     @SuppressWarnings("unchecked")
@@ -41,6 +46,12 @@ public class DetalleCuenta extends javax.swing.JDialog {
         btnRetirar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         lblError = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        lbTitular = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jlStatius = new javax.swing.JLabel();
+        btnDeshabilitar = new javax.swing.JButton();
+        btnHabilitar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -57,11 +68,11 @@ public class DetalleCuenta extends javax.swing.JDialog {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(20, 20, 20)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
-                .addGap(19, 19, 19))
+                .addGap(20, 20, 20))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -107,21 +118,67 @@ public class DetalleCuenta extends javax.swing.JDialog {
         lblError.setForeground(new java.awt.Color(255, 51, 51));
         lblError.setText("Fondos insuficientes");
 
+        jLabel3.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel3.setText("Titular de la cuenta:");
+
+        lbTitular.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        lbTitular.setForeground(new java.awt.Color(102, 102, 102));
+        lbTitular.setText("José Luis Cobián Hermosillo");
+
+        jLabel5.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel5.setText("Estado de la cuenta: ");
+
+        jlStatius.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        jlStatius.setForeground(new java.awt.Color(102, 153, 255));
+        jlStatius.setText("Activo");
+
+        btnDeshabilitar.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        btnDeshabilitar.setText("DesHabilitar");
+        btnDeshabilitar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDesHabilitar(evt);
+            }
+        });
+
+        btnHabilitar.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        btnHabilitar.setText("Habilitar");
+        btnHabilitar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHabilitarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(187, 187, 187)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jlSaldo)
-                    .addComponent(lblError))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnRetirar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnSalir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnDepositar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(187, 187, 187)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jlSaldo)
+                            .addComponent(lblError)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jlStatius))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(lbTitular))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(btnHabilitar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRetirar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnSalir, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDepositar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDeshabilitar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
@@ -131,19 +188,30 @@ public class DetalleCuenta extends javax.swing.JDialog {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(115, 115, 115)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbTitular)
+                        .addGap(33, 33, 33)
                         .addComponent(jlSaldo)
                         .addGap(18, 18, 18)
                         .addComponent(lblError)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(137, 137, 137)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jlStatius)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(btnHabilitar, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDeshabilitar, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnDepositar, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnRetirar, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18))))
+                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18))
         );
 
         pack();
@@ -151,18 +219,52 @@ public class DetalleCuenta extends javax.swing.JDialog {
 
     private void btnDepositarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDepositarActionPerformed
         // TODO add your handling code here:
-        cuenta.deposito();
-        lblError.setVisible(false);
-        actualizarSaldo();
+        boolean valido=false; 
+        double cantidad = 0; 
+        if(cuenta.getStatus()){
+            while(!valido){
+                String cantidadString = JOptionPane
+                             .showInputDialog(this,"Dame una cantidad");
+                try { 
+                    cantidad = Double.parseDouble(cantidadString); 
+                    valido = true;
+                }catch(NumberFormatException e){
+                    JOptionPane.showMessageDialog(this,"Cantidad Invalida");
+                }
+            }
+            cuenta.deposito(cantidad);
+            actualizarSaldo();
+              
+        }else 
+        {
+            JOptionPane.showMessageDialog(this,"Primero habilita tu cuenta");
+        }
     }//GEN-LAST:event_btnDepositarActionPerformed
 
     private void btnRetirarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetirarActionPerformed
         // TODO add your handling code here:
-        if(cuenta.getCuenta()<100){
-            lblError.setVisible(true);
-        }else {
-            cuenta.retiro();
-            actualizarSaldo();
+        boolean valido=false; 
+        double cantidad = 0; 
+        if(cuenta.getStatus()){
+            while(!valido){
+                String cantidadString = JOptionPane
+                             .showInputDialog(this,"Dame una cantidad");
+                try { 
+                    cantidad = Double.parseDouble(cantidadString); 
+                    valido = true;
+                }catch(NumberFormatException e){
+                    JOptionPane.showMessageDialog(this,"Cantidad Invalida");
+                }
+            }
+            if(cuenta.getCuenta()<cantidad){
+                lblError.setVisible(true);
+            }else {
+                cuenta.retiro(cantidad);
+                actualizarSaldo();
+            }
+        }else 
+        {
+            JOptionPane.showMessageDialog(this,"Primero habilita tu cuenta");
         }
     }//GEN-LAST:event_btnRetirarActionPerformed
 
@@ -171,16 +273,40 @@ public class DetalleCuenta extends javax.swing.JDialog {
         System.exit(0);
     }//GEN-LAST:event_btnSalirActionPerformed
 
+    private void btnDesHabilitar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesHabilitar
+        // TODO add your handling code here:
+        if(cuenta.getStatus())
+            cuenta.setStatus(false);
+        else 
+            JOptionPane.showMessageDialog(this, "La cuenta ya esta deshabilitada");        
+        actualizarSaldo();
+    }//GEN-LAST:event_btnDesHabilitar
+
+    private void btnHabilitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHabilitarActionPerformed
+        // TODO add your handling code here:
+        if(!cuenta.getStatus())
+            cuenta.setStatus(true);
+        else 
+            JOptionPane.showMessageDialog(this, "La cuenta ya esta habilitada");        
+        actualizarSaldo();
+    }//GEN-LAST:event_btnHabilitarActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDepositar;
+    private javax.swing.JButton btnDeshabilitar;
+    private javax.swing.JButton btnHabilitar;
     private javax.swing.JButton btnRetirar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel jlSaldo;
+    private javax.swing.JLabel jlStatius;
+    private javax.swing.JLabel lbTitular;
     private javax.swing.JLabel lblError;
     // End of variables declaration//GEN-END:variables
 }

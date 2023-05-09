@@ -2,6 +2,8 @@
 package control;
 
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import vistas.AgregarCuenta;
 import vistas.DetalleCuenta;
 
 /**
@@ -14,23 +16,18 @@ public class Caja {
      * @param args No no maneja argumentos
      */
     public static void main(String[] args) {
+
+        try {
+            
+            UIManager.setLookAndFeel("com.jtattoo.plaf.mint.MintLookAndFeel");
+        } catch (Exception ex) {
+            System.out.println("Ocurrio un errorsito");
+        } 
         
-        double valorInicialCuenta = 300;
-        boolean validado = false; 
+        var ventanaAgregar = new AgregarCuenta(null,
+                true); 
+        ventanaAgregar.setVisible(true);
         
-        while (!validado){
-            String valorEnCadena = JOptionPane.showInputDialog("Dame un valor");        
-            try{
-                valorInicialCuenta = Double.parseDouble(valorEnCadena);
-                validado = true;
-            }catch(NumberFormatException e){
-                validado = false;
-            }
-        }
-        
-        DetalleCuenta dc = new DetalleCuenta
-                             (null,true, valorInicialCuenta);
-        dc.setVisible(true);
         
         
     }
