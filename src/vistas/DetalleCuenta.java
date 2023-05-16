@@ -2,6 +2,9 @@ package vistas;
 
 import javax.swing.JOptionPane;
 import modelo.Cuenta;
+import modelo.CuentaJunior;
+import modelo.CuentaPremium;
+
 
 /**
  * Ventana para mostrar el deatlle y operaciones con la cuenta
@@ -13,14 +16,25 @@ public class DetalleCuenta extends javax.swing.JDialog {
     /**
      * Creates new form DetalleCuenta
      */
-    public DetalleCuenta(java.awt.Frame parent, boolean modal, 
-            double valorInicial, String titular) {
+    public DetalleCuenta(java.awt.Frame parent, 
+            boolean modal, 
+            Cuenta cuenta) {
         super(parent, modal);
         initComponents();
-        cuenta = new Cuenta(valorInicial, titular);
+        this.cuenta = cuenta;
+        String edad = ""; 
+        if(cuenta instanceof CuentaPremium)
+        {
+            lblTipoCuenta.setText("PREMIUM");
+        } else if(cuenta instanceof CuentaJunior){
+            lblTipoCuenta.setText("JUNIOR");
+            CuentaJunior junior = (CuentaJunior)cuenta; 
+            edad = "" + junior.getEdad();
+        }
         actualizarSaldo();
         lblError.setVisible(false);
-        lbTitular.setText(titular);
+        lbTitular.setText(cuenta.getTitular() 
+                    + " : " + edad);
     }
     
     /**
@@ -41,6 +55,7 @@ public class DetalleCuenta extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        lblTipoCuenta = new javax.swing.JLabel();
         jlSaldo = new javax.swing.JLabel();
         btnDepositar = new javax.swing.JButton();
         btnRetirar = new javax.swing.JButton();
@@ -63,13 +78,19 @@ public class DetalleCuenta extends javax.swing.JDialog {
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vistas/img/banco.png"))); // NOI18N
 
+        lblTipoCuenta.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        lblTipoCuenta.setForeground(new java.awt.Color(102, 153, 255));
+        lblTipoCuenta.setText("Activo");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(jLabel1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(lblTipoCuenta))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(20, 20, 20))
@@ -77,14 +98,15 @@ public class DetalleCuenta extends javax.swing.JDialog {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel2)))
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addGap(20, 20, 20)
+                .addComponent(jLabel1)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblTipoCuenta)
+                    .addComponent(jLabel2))
+                .addContainerGap(8, Short.MAX_VALUE))
         );
 
         jlSaldo.setFont(new java.awt.Font("Helvetica Neue", 0, 36)); // NOI18N
@@ -208,7 +230,7 @@ public class DetalleCuenta extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnDepositar, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRetirar, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
+                        .addComponent(btnRetirar, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18))
@@ -308,5 +330,6 @@ public class DetalleCuenta extends javax.swing.JDialog {
     private javax.swing.JLabel jlStatius;
     private javax.swing.JLabel lbTitular;
     private javax.swing.JLabel lblError;
+    private javax.swing.JLabel lblTipoCuenta;
     // End of variables declaration//GEN-END:variables
 }

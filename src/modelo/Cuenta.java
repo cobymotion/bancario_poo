@@ -60,6 +60,10 @@ public class Cuenta {
     public void setStatus(boolean status) {
         this.status = status;
     }
+
+    public String getTitular() {
+        return titular;
+    }
     
     
     

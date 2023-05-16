@@ -5,6 +5,9 @@
 package vistas;
 
 import javax.swing.JOptionPane;
+import modelo.Cuenta;
+import modelo.CuentaJunior;
+import modelo.CuentaPremium;
 
 /**
  *
@@ -12,6 +15,9 @@ import javax.swing.JOptionPane;
  */
 public class AgregarCuenta extends javax.swing.JDialog {
 
+    
+    int tipoCuenta; 
+    
     /**
      * Creates new form AgregarCuenta
      */
@@ -19,6 +25,8 @@ public class AgregarCuenta extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         lblError.setVisible(false);
+        visualizarEdad(false);
+        tipoCuenta = -1;
     }
 
     /**
@@ -39,9 +47,13 @@ public class AgregarCuenta extends javax.swing.JDialog {
         txtInicialCuenta = new javax.swing.JTextField();
         btnCrearCuenta = new javax.swing.JButton();
         lblError = new javax.swing.JLabel();
+        jtEdad = new javax.swing.JTextField();
+        lblEdad = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        cmbTipoCuenta = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(591, 400));
+        setPreferredSize(new java.awt.Dimension(591, 520));
 
         jPanel1.setBackground(new java.awt.Color(153, 200, 214));
 
@@ -106,6 +118,31 @@ public class AgregarCuenta extends javax.swing.JDialog {
         lblError.setForeground(new java.awt.Color(255, 51, 51));
         lblError.setText("Valor inválido");
 
+        jtEdad.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        jtEdad.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jtEdad.setText("0");
+        jtEdad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jtEdadKeyPressed(evt);
+            }
+        });
+
+        lblEdad.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        lblEdad.setForeground(new java.awt.Color(102, 102, 102));
+        lblEdad.setText("Edad");
+
+        jLabel6.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel6.setText("Tipo de cuenta");
+
+        cmbTipoCuenta.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        cmbTipoCuenta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione una cuenta", "JUNIOR", "PREMIUM" }));
+        cmbTipoCuenta.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbTipoCuentaItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -115,43 +152,57 @@ public class AgregarCuenta extends javax.swing.JDialog {
                 .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cmbTipoCuenta, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(txtTitular, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnCrearCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(20, 20, 20))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblError)
-                            .addComponent(txtInicialCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(lblError)
+                                    .addComponent(txtInicialCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(lblEdad)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(jtEdad, javax.swing.GroupLayout.Alignment.TRAILING)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnCrearCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(20, 20, 20))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cmbTipoCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtTitular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(lblEdad))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtInicialCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtEdad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtInicialCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addComponent(btnCrearCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(lblError)))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addComponent(lblError)
+                .addGap(18, 18, 18)
+                .addComponent(btnCrearCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(10, Short.MAX_VALUE))
         );
 
         pack();
@@ -177,11 +228,29 @@ public class AgregarCuenta extends javax.swing.JDialog {
             lblError.setVisible(true);
             return; 
         }
-        this.dispose();
+        Cuenta cuenta = null; 
+        switch(tipoCuenta){
+            case 1: 
+                int edad = Integer.parseInt(jtEdad.getText()); 
+                System.out.println("Edad: " + edad);
+                if(edad <1 || edad>18){
+                    lblError.setVisible(true);
+                    return;
+                }
+                else {
+                    cuenta = new CuentaJunior(titular, valorInicialCuenta, edad);                
+                }
+                break; 
+            case 2:
+                cuenta = new CuentaPremium(titular, valorInicialCuenta);
+                break; 
+            default: 
+                lblError.setVisible(true);
+                return; 
+        }
+        this.dispose();                
         DetalleCuenta dc = new DetalleCuenta
-                             (null,true
-                         , valorInicialCuenta, 
-                                     titular);
+                             (null,true,cuenta);
         dc.setVisible(true);
     }//GEN-LAST:event_btnCrearCuentaActionPerformed
 
@@ -189,15 +258,49 @@ public class AgregarCuenta extends javax.swing.JDialog {
         // TODO add your handling code here:
         lblError.setVisible(false);
     }//GEN-LAST:event_txtInicialCuentaKeyPressed
+
+    private void jtEdadKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtEdadKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtEdadKeyPressed
+
+    private void cmbTipoCuentaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbTipoCuentaItemStateChanged
+        // TODO add your handling code here:
+        lblError.setVisible(false);
+        int indiceSeleccionado = cmbTipoCuenta.getSelectedIndex();        
+        System.out.println("Indice: " + indiceSeleccionado);
+        switch(indiceSeleccionado){
+            case 1: 
+                visualizarEdad(true);
+                tipoCuenta = 1; 
+                break; 
+            case 2: 
+                visualizarEdad(false);
+                tipoCuenta = 2; 
+                break; 
+            default:
+                tipoCuenta = -1; 
+        }
+        
+    }//GEN-LAST:event_cmbTipoCuentaItemStateChanged
    
 
+    private void visualizarEdad(boolean mostrar) {
+        lblEdad.setVisible(mostrar);
+        jtEdad.setVisible(mostrar);
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCrearCuenta;
+    private javax.swing.JComboBox<String> cmbTipoCuenta;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField jtEdad;
+    private javax.swing.JLabel lblEdad;
     private javax.swing.JLabel lblError;
     private javax.swing.JTextField txtInicialCuenta;
     private javax.swing.JTextField txtTitular;
